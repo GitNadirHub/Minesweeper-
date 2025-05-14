@@ -24,6 +24,9 @@ Sprite cell1(t_cell1);
 Texture t_cell2("assets/sprites/cell2.png");
 Sprite cell2(t_cell2);
 
+Texture t_cell3("assets/sprites/cell3.png");
+Sprite cell3(t_cell3);
+
 Texture t_cellFlag("assets/sprites/cellFlag.png");
 Sprite cellFlag(t_cellFlag);
 
@@ -237,6 +240,11 @@ void beginnerMode()
                 {
                     cell2.setPosition({ 32.f * j, 32.f * i + extraH });
                     window.draw(cell2);
+                }
+                else if (grid[i][j].val == 3)
+                {
+                    cell3.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell3);
                 }
             }
         }
