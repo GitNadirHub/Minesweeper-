@@ -6,5 +6,16 @@ sf::RenderWindow window(sf::VideoMode({ 288, 450 }), "Minesweeper++");
 
 int main()
 {
-    beginnerMode();
+    state = "beg";
+    while (1)
+    {
+        if (state == "beg")
+        {
+            beginnerMode();
+        }
+        else if (state == "loss")
+        {
+            lose();
+        }
+    }
 }

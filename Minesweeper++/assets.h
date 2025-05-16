@@ -22,3 +22,9 @@ extern sf::Sprite cell3;
 
 extern sf::Texture t_cellFlag;
 extern sf::Sprite cellFlag;
+
+extern sf::Texture t_cellFlagBad;
+extern sf::Sprite cellFlagBad;
+
+extern sf::Texture t_cellMineBad;
+extern sf::Sprite cellMineBad;

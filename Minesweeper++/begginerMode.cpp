@@ -1,12 +1,97 @@
 #include "begginerMode.h"
 using namespace sf;
 
-void lose(cell grid[][9])
+cell grid[9][9];
+
+cell* fault = nullptr;
+
+void binit()
 {
+    state = "beg";
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            grid[i][j] = {0, 0, 0};
+}
+
+void lose()
+{
+    window.setSize({ 288, 450 });
+    window.setTitle("Minesweeper++ - Beginner");
+    const int extraH = 160;
+
+
     for (int i = 0; i < 9; i++)
         for (int j = 0; j < 9; j++)
             grid[i][j].visible = 1;
 
+    while (window.isOpen())
+    {
+        while (const std::optional event = window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                window.close();
+            if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonReleased>())
+            {
+                if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+                {
+                    binit();
+                    return;
+                }
+            }
+        }
+        window.clear();
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (&grid[i][j] == fault)
+                {
+                    cellMineBad.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cellMineBad);
+                    continue;
+                }
+                if (grid[i][j].flagged)
+                {
+                    if (grid[i][j].val == MINE)
+                    {
+                        cellFlag.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cellFlag);
+                    }
+                    else
+                    {
+                        cellFlagBad.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cellFlagBad);
+                    }
+                }
+                else if (grid[i][j].val == 0)
+                {
+                    cellBg.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cellBg);
+                }
+                else if (grid[i][j].val == MINE)
+                {
+                    cellMine.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cellMine);
+                }
+                else if (grid[i][j].val == 1)
+                {
+                    cell1.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell1);
+                }
+                else if (grid[i][j].val == 2)
+                {
+                    cell2.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell2);
+                }
+                else if (grid[i][j].val == 3)
+                {
+                    cell3.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell3);
+                }
+            }
+        }
+        window.display();
+    }
 }
 
 void beginnerMode()
@@ -14,10 +99,10 @@ void beginnerMode()
     srand(time(0));
     window.setSize({ 288, 450 });
     window.setTitle("Minesweeper++ - Beginner");
-    cell grid[9][9];
     const int extraH = 160;
 
     bool gameStarted = 0;
+    fault = nullptr;
 
     while (window.isOpen())
     {
@@ -37,7 +122,7 @@ void beginnerMode()
                     x /= 32, y /= 32;
 
                     //std::cout << x << ' ' << y << std::endl;
-                    if (isValid(y, x))
+                    if (isValid(y, x) && !grid[y][x].flagged)
                     {
                         if (!gameStarted)
                         {
@@ -51,21 +136,34 @@ void beginnerMode()
                         }
                         else if (grid[y][x].val == MINE)
                         {
-                            lose(grid);
+                            state = "loss";
+                            fault = &grid[y][x];
+                            return;
                         }
                         else if (grid[y][x].visible == 1)
                         {
                             if (adjacentMinesCount(y, x, grid) >= grid[y][x].val)
                             {
-                                if (isValid(y + 1, x) && grid[y + 1][x].val != MINE) grid[y + 1][x].visible = 1;
-                                if (isValid(y, x + 1) && grid[y][x + 1].val != MINE) grid[y][x + 1].visible = 1;
-                                if (isValid(y - 1, x) && grid[y - 1][x].val != MINE) grid[y - 1][x].visible = 1;
-                                if (isValid(y, x - 1) && grid[y][x - 1].val != MINE) grid[y][x - 1].visible = 1;
+                                int dirs[8][2] = {
+                                    {1, 0}, {-1, 0}, {0, 1}, {0, -1},
+                                    {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
+                                };
 
-                                if (isValid(y + 1, x + 1) && grid[y + 1][x + 1].val != MINE) grid[y + 1][x + 1].visible = 1;
-                                if (isValid(y - 1, x - 1) && grid[y - 1][x - 1].val != MINE) grid[y - 1][x - 1].visible = 1;
-                                if (isValid(y + 1, x - 1) && grid[y + 1][x - 1].val != MINE) grid[y + 1][x - 1].visible = 1;
-                                if (isValid(y - 1, x + 1) && grid[y - 1][x + 1].val != MINE) grid[y - 1][x + 1].visible = 1;
+                                for (int i = 0; i < 8; ++i)
+                                {
+                                    int ny = y + dirs[i][0];
+                                    int nx = x + dirs[i][1];
+
+                                    if (isValid(ny, nx) && grid[ny][nx].val != MINE)
+                                    {
+                                        if (grid[ny][nx].flagged)
+                                        {
+                                            state = "loss";
+                                            return;
+                                        }
+                                        grid[ny][nx].visible = 1;
+                                    }
+                                }
 
                             }
                         }

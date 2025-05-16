@@ -19,3 +19,9 @@ Sprite cell3(t_cell3);
 
 Texture t_cellFlag("assets/sprites/cellFlag.png");
 Sprite cellFlag(t_cellFlag);
+
+Texture t_cellFlagBad("assets/sprites/cellFlagBad.png");
+Sprite cellFlagBad(t_cellFlagBad);
+
+Texture t_cellMineBad("assets/sprites/cellMineBad.png");
+Sprite cellMineBad(t_cellMineBad);

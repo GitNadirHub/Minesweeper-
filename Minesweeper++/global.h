@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <ctime>
+#include <string>
 
 struct cell
 {
@@ -11,6 +12,6 @@ struct cell
     bool flagged = 0;
 };
 
-
+extern std::string state;
 
 extern sf::RenderWindow window;

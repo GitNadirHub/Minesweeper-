@@ -27,6 +27,9 @@
     <ClCompile Include="assets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="grid.h">

@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="begginerMode.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="assets.cpp" />

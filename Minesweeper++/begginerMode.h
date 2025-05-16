@@ -1,4 +1,5 @@
 #pragma once
 #include "grid.h"
-void lose(cell grid[][9]);
+void lose();
 void beginnerMode();
+void binit();
