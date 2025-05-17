@@ -40,3 +40,11 @@ extern sf::Sprite sad;
 
 extern sf::Texture t_cool;
 extern sf::Sprite cool;
+
+extern sf::Texture t_display;
+extern sf::Sprite display;
+
+
+
+
+extern sf::Font digFont;

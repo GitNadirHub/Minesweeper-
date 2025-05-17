@@ -37,3 +37,9 @@ Sprite sad(t_sad);
 
 Texture t_cool("assets/sprites/cool.png");
 Sprite cool(t_cool);
+
+Texture t_display("assets/sprites/display.png");
+Sprite display(t_display);
+
+
+Font digFont("assets/fonts/DS-DIGI.ttf");

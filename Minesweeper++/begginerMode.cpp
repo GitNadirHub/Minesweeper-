@@ -1,4 +1,6 @@
 #include "begginerMode.h"
+#include <sstream>
+#include <iomanip>
 using namespace sf;
 
 auto bgColor = sf::Color{ 120, 152, 193, 255 };
@@ -29,7 +31,6 @@ void lose()
     window.setSize({ 288, 450 });
     window.setTitle("Minesweeper++ - Beginner");
     const int extraH = 160;
-
 
     for (int i = 0; i < 9; i++)
         for (int j = 0; j < 9; j++)
@@ -121,6 +122,16 @@ void beginnerMode()
 
     abdullahInit(smile);
 
+    Clock clock;
+    Text timeText(digFont);
+    
+    timeText.setCharacterSize(60);
+
+    timeText.setString("000");
+
+    int counter = 1;
+    float updateInterval = 1.0f;
+
     while (window.isOpen())
     {
         while (const std::optional event = window.pollEvent())
@@ -179,6 +190,8 @@ void beginnerMode()
                                             return;
                                         }
                                         grid[ny][nx].visible = 1;
+                                        if (grid[ny][nx].val == 0)
+                                            fill(ny, nx, grid);
                                     }
                                 }
 
@@ -202,9 +215,35 @@ void beginnerMode()
                 }
             }
         }
+        
+        
+        if (gameStarted && clock.getElapsedTime().asSeconds() >= updateInterval)
+        {
+            clock.restart();
+
+            if (counter <= 999)
+            {
+                std::stringstream ss;
+                ss << std::setw(3) << std::setfill('0') << counter;
+                timeText.setString(ss.str());
+                counter++;
+            }
+            else
+            {
+                timeText.setString(":3");
+            }
+        }
+        
         window.clear(bgColor);
 
         window.draw(smile);
+
+        window.draw(display);
+
+        display.setPosition({8.f, smile.getPosition().y+8.f});
+        timeText.setPosition({display.getPosition().x+6, display.getPosition().y-16});
+
+        window.draw(timeText);
 
         for (int i = 0; i < 9; i++)
         {
