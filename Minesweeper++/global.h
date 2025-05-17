@@ -6,6 +6,7 @@
 #include <ctime>
 #include <string>
 
+
 struct cell
 {
     int val = 0;
@@ -16,3 +17,5 @@ struct cell
 extern std::string state;
 
 extern sf::RenderWindow window;
+
+const int extraH = 160;

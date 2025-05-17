@@ -5,7 +5,16 @@ auto bgColor = sf::Color{ 120, 152, 193, 255 };
 
 cell grid[9][9];
 
-cell* fault = nullptr;
+cell* fault = nullptr; //used for loss screen
+
+
+void abdullahInit(Sprite &sprite)
+{
+    float winMidX = (window.getSize().x) / 2;
+    sprite.setScale({ 2.f, 2.f });
+    float imgWidth = 64.f;
+    sprite.setPosition({ winMidX - imgWidth / 2, extraH / 2 });
+}
 
 void binit()
 {
@@ -42,6 +51,7 @@ void lose()
             }
         }
         window.clear(bgColor);
+
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -103,13 +113,13 @@ void lose()
 
 void beginnerMode()
 {
-    srand(time(0));
     window.setSize({ 288, 450 });
     window.setTitle("Minesweeper++ - Beginner");
-    const int extraH = 160;
 
     bool gameStarted = 0;
     fault = nullptr;
+
+    abdullahInit(smile);
 
     while (window.isOpen())
     {
@@ -134,7 +144,7 @@ void beginnerMode()
                         if (!gameStarted)
                         {
                             gameStarted = 1;
-                            genRandomMines(y, x, grid);
+                            genRandomMines(y, x, grid, 9, 9);
                             fill(y, x, grid);
                         }
                         else if (grid[y][x].val == 0)
@@ -193,6 +203,9 @@ void beginnerMode()
             }
         }
         window.clear(bgColor);
+
+        window.draw(smile);
+
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)

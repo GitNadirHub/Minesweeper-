@@ -28,3 +28,12 @@ Sprite cellFlagBad(t_cellFlagBad);
 
 Texture t_cellMineBad("assets/sprites/cellMineBad.png");
 Sprite cellMineBad(t_cellMineBad);
+
+Texture t_smile("assets/sprites/smile.png");
+Sprite smile(t_smile);
+
+Texture t_sad("assets/sprites/sad.png");
+Sprite sad(t_sad);
+
+Texture t_cool("assets/sprites/cool.png");
+Sprite cool(t_cool);

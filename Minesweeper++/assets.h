@@ -31,3 +31,12 @@ extern sf::Sprite cellFlagBad;
 
 extern sf::Texture t_cellMineBad;
 extern sf::Sprite cellMineBad;
+
+extern sf::Texture t_smile;
+extern sf::Sprite smile;
+
+extern sf::Texture t_sad;
+extern sf::Sprite sad;
+
+extern sf::Texture t_cool;
+extern sf::Sprite cool;
