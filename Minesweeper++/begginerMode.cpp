@@ -1,6 +1,8 @@
 #include "begginerMode.h"
 using namespace sf;
 
+auto bgColor = sf::Color{ 120, 152, 193, 255 };
+
 cell grid[9][9];
 
 cell* fault = nullptr;
@@ -39,7 +41,7 @@ void lose()
                 }
             }
         }
-        window.clear();
+        window.clear(bgColor);
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -87,6 +89,11 @@ void lose()
                 {
                     cell3.setPosition({ 32.f * j, 32.f * i + extraH });
                     window.draw(cell3);
+                }
+                else if (grid[i][j].val == 4)
+                {
+                    cell4.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell4);
                 }
             }
         }
@@ -185,7 +192,7 @@ void beginnerMode()
                 }
             }
         }
-        window.clear();
+        window.clear(bgColor);
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -227,6 +234,11 @@ void beginnerMode()
                 {
                     cell3.setPosition({ 32.f * j, 32.f * i + extraH });
                     window.draw(cell3);
+                }
+                else if (grid[i][j].val == 4)
+                {
+                    cell4.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell4);
                 }
             }
         }

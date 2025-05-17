@@ -20,6 +20,9 @@ extern sf::Sprite cell2;
 extern sf::Texture t_cell3;
 extern sf::Sprite cell3;
 
+extern sf::Texture t_cell4;
+extern sf::Sprite cell4;
+
 extern sf::Texture t_cellFlag;
 extern sf::Sprite cellFlag;
 

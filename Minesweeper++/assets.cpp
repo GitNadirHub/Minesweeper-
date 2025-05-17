@@ -17,6 +17,9 @@ Sprite cell2(t_cell2);
 Texture t_cell3("assets/sprites/cell3.png");
 Sprite cell3(t_cell3);
 
+Texture t_cell4("assets/sprites/cell4.png");
+Sprite cell4(t_cell4);
+
 Texture t_cellFlag("assets/sprites/cellFlag.png");
 Sprite cellFlag(t_cellFlag);
 
