@@ -1,20 +1,24 @@
 #include "begginerMode.h"
 using namespace sf;
 
-sf::RenderWindow window(sf::VideoMode({ 288, 450 }), "Minesweeper++");
+RenderWindow window(VideoMode({ 288, 450 }), "Minesweeper++");
 
 int main()
 {
-    state = "beg";
+    state = Ongoing;
+    level = Beginner;
     while (1)
     {
-        if (state == "beg")
+        switch (level)
         {
-            beginnerMode();
-        }
-        else if (state == "loss")
-        {
-            lose();
+        case Beginner:
+            switch (state)
+            {
+            case Ongoing: beginnerMode(); break;
+            case Win: begWin(); break;
+            case Loss: begLose(); break;
+            }
+            break;
         }
     }
 }

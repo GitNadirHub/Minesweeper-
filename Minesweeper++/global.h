@@ -14,8 +14,21 @@ struct cell
     bool flagged = 0;
 };
 
-extern std::string state;
+enum stateString
+{
+    Ongoing, Win, Loss
+};
+
+enum levelString
+{
+    Beginner, Intermediate, Hard, Evil
+};
+
+extern stateString state;
+extern levelString level;
 
 extern sf::RenderWindow window;
 
 const int extraH = 160;
+
+extern std::string fillNumericString(int value);

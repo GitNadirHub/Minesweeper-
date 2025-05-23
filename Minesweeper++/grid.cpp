@@ -5,6 +5,8 @@
 #include <utility>
 #include <unordered_set>
 
+//:D
+
 void fill(int i, int j, cell grid[][9])
 {
     if (i < 0 || i >= 9 || j < 0 || j >= 9)
@@ -56,9 +58,9 @@ int flattenCoordinates(int row, int col, int cols)
     return row * cols + col;
 }
 
-void genRandomMines(int i_exception, int j_exception, cell grid[][9], int rows, int cols)
+void genRandomMines(int i_exception, int j_exception, cell grid[][9], int rows, int cols, int mineCount)
 {
-    int n = 15;
+    int n = mineCount;
 
     int a[81], asize=0;
     

@@ -43,6 +43,7 @@ extern sf::Sprite cool;
 
 extern sf::Texture t_display;
 extern sf::Sprite display;
+extern sf::Sprite display;
 
 
 

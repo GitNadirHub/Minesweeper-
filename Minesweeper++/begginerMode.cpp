@@ -1,14 +1,23 @@
 #include "begginerMode.h"
 #include <sstream>
 #include <iomanip>
+
 using namespace sf;
 
 auto bgColor = sf::Color{ 120, 152, 193, 255 };
 
 cell grid[9][9];
 
+int initialMineCount = 15;
+int mineCount = initialMineCount;
+
 cell* fault = nullptr; //used for loss screen
 
+Text timeText(digFont);
+Text mineText(digFont);
+
+
+//Abdullah my beloved <3
 
 void abdullahInit(Sprite &sprite)
 {
@@ -20,21 +29,23 @@ void abdullahInit(Sprite &sprite)
 
 void binit()
 {
-    state = "beg";
+    mineCount = 15;
+    state = Ongoing;
     for (int i = 0; i < 9; i++)
         for (int j = 0; j < 9; j++)
             grid[i][j] = {0, 0, 0};
 }
 
-void lose()
+
+
+void begWin()
 {
     window.setSize({ 288, 450 });
     window.setTitle("Minesweeper++ - Beginner");
     const int extraH = 160;
 
-    for (int i = 0; i < 9; i++)
-        for (int j = 0; j < 9; j++)
-            grid[i][j].visible = 1;
+    abdullahInit(cool);
+    mineText.setString("000");
 
     while (window.isOpen())
     {
@@ -51,7 +62,110 @@ void lose()
                 }
             }
         }
+
         window.clear(bgColor);
+
+
+        window.draw(cool);
+
+        display.setPosition({ 8.f, smile.getPosition().y + 8.f });
+        mineText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
+        window.draw(display);
+
+        display.setPosition({ window.getSize().x - t_display.getSize().x - 8.f , smile.getPosition().y + 8.f });
+        timeText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
+        window.draw(display);
+
+        window.draw(mineText);
+        window.draw(timeText);
+
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (grid[i][j].val == 0)
+                {
+                    cellBg.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cellBg);
+                }
+                else if (grid[i][j].val == MINE)
+                {
+                    cellFlag.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cellFlag);
+                }
+                else if (grid[i][j].val == 1)
+                {
+                    cell1.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell1);
+                }
+                else if (grid[i][j].val == 2)
+                {
+                    cell2.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell2);
+                }
+                else if (grid[i][j].val == 3)
+                {
+                    cell3.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell3);
+                }
+                else if (grid[i][j].val == 4)
+                {
+                    cell4.setPosition({ 32.f * j, 32.f * i + extraH });
+                    window.draw(cell4);
+                }
+            }
+        }
+        window.display();
+    }
+
+}
+
+
+void begLose()
+{
+    window.setSize({ 288, 450 });
+    window.setTitle("Minesweeper++ - Beginner");
+    const int extraH = 160;
+
+    abdullahInit(sad);
+
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            grid[i][j].visible = 1;
+
+    while (window.isOpen())
+    {
+
+        
+
+        while (const std::optional event = window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                window.close();
+            if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonReleased>())
+            {
+                if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+                {
+                    binit();
+                    return;
+                }
+            }
+        }
+        window.clear(bgColor);
+
+
+        window.draw(sad);
+
+        display.setPosition({ 8.f, smile.getPosition().y + 8.f });
+        mineText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
+        window.draw(display);
+
+        display.setPosition({ window.getSize().x - t_display.getSize().x - 8.f , smile.getPosition().y + 8.f });
+        timeText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
+        window.draw(display);
+
+        window.draw(mineText);
+        window.draw(timeText);
 
         for (int i = 0; i < 9; i++)
         {
@@ -123,11 +237,13 @@ void beginnerMode()
     abdullahInit(smile);
 
     Clock clock;
-    Text timeText(digFont);
-    
+
     timeText.setCharacterSize(60);
+    mineText.setCharacterSize(60);
 
     timeText.setString("000");
+
+    mineText.setString(fillNumericString(mineCount));
 
     int counter = 1;
     float updateInterval = 1.0f;
@@ -155,7 +271,7 @@ void beginnerMode()
                         if (!gameStarted)
                         {
                             gameStarted = 1;
-                            genRandomMines(y, x, grid, 9, 9);
+                            genRandomMines(y, x, grid, 9, 9, mineCount);
                             fill(y, x, grid);
                         }
                         else if (grid[y][x].val == 0)
@@ -164,7 +280,7 @@ void beginnerMode()
                         }
                         else if (grid[y][x].val == MINE)
                         {
-                            state = "loss";
+                            state = Loss;
                             fault = &grid[y][x];
                             return;
                         }
@@ -174,7 +290,7 @@ void beginnerMode()
                             {
                                 int dirs[8][2] = {
                                     {1, 0}, {-1, 0}, {0, 1}, {0, -1},
-                                    {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
+                                    {1, 1}, {-1, -1}, {1, -1}, {-1, 1} 
                                 };
 
                                 for (int i = 0; i < 8; ++i)
@@ -186,12 +302,12 @@ void beginnerMode()
                                     {
                                         if (grid[ny][nx].flagged)
                                         {
-                                            state = "loss";
+                                            state = Loss;
                                             return;
                                         }
-                                        grid[ny][nx].visible = 1;
                                         if (grid[ny][nx].val == 0)
                                             fill(ny, nx, grid);
+                                        grid[ny][nx].visible = 1;
                                     }
                                 }
 
@@ -200,7 +316,7 @@ void beginnerMode()
                         grid[y][x].visible = 1, grid[y][x].flagged = 0;
                     }
                 }
-                else if (mouseButtonPressed->button == sf::Mouse::Button::Right)
+                else if (mouseButtonPressed->button == sf::Mouse::Button::Right && gameStarted)
                 {
                     int x = Mouse::getPosition(window).x;
                     int y = Mouse::getPosition(window).y;
@@ -211,6 +327,8 @@ void beginnerMode()
                     if (isValid(y, x) && !grid[y][x].visible)
                     {
                         grid[y][x].flagged = !grid[y][x].flagged;
+                        mineCount += (-1 * grid[y][x].flagged) * 2 + 1;
+                        mineText.setString(fillNumericString(mineCount)); // adds/subtracts 1
                     }
                 }
             }
@@ -223,10 +341,7 @@ void beginnerMode()
 
             if (counter <= 999)
             {
-                std::stringstream ss;
-                ss << std::setw(3) << std::setfill('0') << counter;
-                timeText.setString(ss.str());
-                counter++;
+                timeText.setString(fillNumericString(counter++));
             }
             else
             {
@@ -238,12 +353,18 @@ void beginnerMode()
 
         window.draw(smile);
 
+        display.setPosition({8.f, smile.getPosition().y+8.f});
+        mineText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
         window.draw(display);
 
-        display.setPosition({8.f, smile.getPosition().y+8.f});
-        timeText.setPosition({display.getPosition().x+6, display.getPosition().y-16});
+        display.setPosition({window.getSize().x - t_display.getSize().x - 8.f , smile.getPosition().y + 8.f});
+        timeText.setPosition({ display.getPosition().x + 10, display.getPosition().y - 16 });
+        window.draw(display);
 
+        window.draw(mineText);
         window.draw(timeText);
+
+        unsigned total = 0;
 
         for (int i = 0; i < 9; i++)
         {
@@ -262,37 +383,46 @@ void beginnerMode()
                         window.draw(cellCover);
                     }
                 }
-                else if (grid[i][j].val == 0)
+                else
                 {
-                    cellBg.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cellBg);
-                }
-                else if (grid[i][j].val == MINE)
-                {
-                    cellMine.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cellMine);
-                }
-                else if (grid[i][j].val == 1)
-                {
-                    cell1.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cell1);
-                }
-                else if (grid[i][j].val == 2)
-                {
-                    cell2.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cell2);
-                }
-                else if (grid[i][j].val == 3)
-                {
-                    cell3.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cell3);
-                }
-                else if (grid[i][j].val == 4)
-                {
-                    cell4.setPosition({ 32.f * j, 32.f * i + extraH });
-                    window.draw(cell4);
+                    total++;
+                    if (grid[i][j].val == 0)
+                    {
+                        cellBg.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cellBg);
+                    }
+                    else if (grid[i][j].val == MINE)
+                    {
+                        cellMine.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cellMine);
+                    }
+                    else if (grid[i][j].val == 1)
+                    {
+                        cell1.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cell1);
+                    }
+                    else if (grid[i][j].val == 2)
+                    {
+                        cell2.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cell2);
+                    }
+                    else if (grid[i][j].val == 3)
+                    {
+                        cell3.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cell3);
+                    }
+                    else if (grid[i][j].val == 4)
+                    {
+                        cell4.setPosition({ 32.f * j, 32.f * i + extraH });
+                        window.draw(cell4);
+                    }
                 }
             }
+        }
+        if (total == 9 * 9 - initialMineCount)
+        {
+            state = Win;
+            return;
         }
         window.display();
     }

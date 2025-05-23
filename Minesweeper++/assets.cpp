@@ -42,4 +42,4 @@ Texture t_display("assets/sprites/display.png");
 Sprite display(t_display);
 
 
-Font digFont("assets/fonts/DS-DIGI.ttf");
+Font digFont("assets/fonts/digital-7 (mono).ttf");

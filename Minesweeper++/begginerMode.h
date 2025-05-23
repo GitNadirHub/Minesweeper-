@@ -1,5 +1,6 @@
 #pragma once
 #include "grid.h"
-void lose();
+void begLose();
 void beginnerMode();
 void binit();
+void begWin();
